@@ -7,13 +7,13 @@ using namespace std;
 
 //search from height 1 to 100000
 //skip un used height and check used value to optimize
-int maxAnswer(int size, int used[], int heights[], vector<vector<int>> idx) {
+int maxAnswer(int size, int check[], int used[], vector<vector<int>> idx) {
 	int i, j, tmp;
 	int left, right;
 	int answer = 0;
 
-	for (i = 1; i <= 10000; i++) {
-		if (heights[i]) {
+	for (i = 0; i <= 10000; i++) {
+		if (check[i]) {
 			for (j = 0; j < idx[i].size(); j++) {
 				//better optimization can be done
 				//by checking already checked values
@@ -27,16 +27,13 @@ int maxAnswer(int size, int used[], int heights[], vector<vector<int>> idx) {
 					right++;
 				}
 
-				tmp = i * (right + left + 1);
+				tmp = i * (right + left +1); //height(i) * width(left + right + 1)
 				if (answer < tmp) {
 					answer = tmp;
 				}
 
 				used[idx[i][j]] = 1;
 			}
-			/*for (j = 0; j < idx[i].size(); j++) {
-				used[j] = 1;
-			}*/
 		}
 	}
 	return answer;
@@ -46,24 +43,22 @@ int main()
 {
 	int i, j, tmp;
 	int testCase;
-	int size;	
+	int size, height;	
 
 	scanf("%d", &testCase);
 	while (testCase) {
-
-		int arr[10001];
-		int used[10001] = { 0 };
-		int heights[10001] = { 0 };
+		int used[20000] = { 0 };//used index
+		int check[10001] = { 0 };//height to be checked
 		vector<vector<int>> idx(10001, vector<int>());
 
 		//inputs
 		scanf("%d", &size);
 		for (i = 0; i < size; i++) {
-			scanf("%d", &arr[i]);
-			heights[arr[i]] = 1;
-			idx[arr[i]].push_back(i);
+			scanf("%d", &height);
+			check[height] = 1;
+			idx[height].push_back(i);
 		}
-		printf("%d\n", maxAnswer(size, used, heights, idx));
+		printf("%d\n", maxAnswer(size, check, used, idx));
 
 		testCase--;
 	}
