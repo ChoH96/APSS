@@ -7,4 +7,5 @@ algorithmic problem solving strategies
 4. BOARDCOVER
 5. CLOCKSYNC
 6. QUADTREE
-7. FENCE (using using book's algorithm vs my own algorithm)
+7. FENCE (using using book's algorithm) vs FENCE2 (my own algorithm)
+8. FANMEETING
