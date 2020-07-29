@@ -18,9 +18,11 @@ vector<int> multiply(vector<int> a, vector<int> b) {
 	return answer;
 }
 
-vector<int> addTo(vector<int> a, vector<int> b, int shift) {
+vector<int> addTo(vector<int> &a, vector<int> &b, int shift) {
 	int i;
-	a.resize(b.size() + shift, 0);
+	if (a.size() < b.size() + shift) {
+		a.resize(b.size() + shift, 0);
+	}
 
 	for (i = 0; i < b.size(); i++) {
 		a[i + shift] += b[i];
@@ -28,9 +30,11 @@ vector<int> addTo(vector<int> a, vector<int> b, int shift) {
 	return a;
 }
 
-vector<int> subFrom(vector<int> a, vector<int> b, int shift) {
+vector<int> subFrom(vector<int> &a, vector<int> &b, int shift) {
 	int i;
-	a.resize(b.size() + shift, 0);
+	if (a.size() < b.size() + shift) {
+		a.resize(b.size() + shift, 0);
+	}
 
 	for (i = 0; i < b.size(); i++) {
 		a[i + shift] -= b[i];
@@ -64,15 +68,15 @@ vector<int> karatsuba(vector<int> a, vector<int> b) {
 	vector<int> z2 = karatsuba(a1, b1);
 	vector<int> z0 = karatsuba(a0, b0);
 	
-	a0 = addTo(a0, a1, 0);
-	b0 = addTo(b0, b1, 0);
+	addTo(a0, a1, 0);
+	addTo(b0, b1, 0);
 	vector<int> z1 = karatsuba(a0, b0);
-	z1 = subFrom(z1, z0, 0);
-	z1 = subFrom(z1, z2, 0);
+	subFrom(z1, z0, 0);
+	subFrom(z1, z2, 0);
 
-	answer = addTo(answer, z0, 0);
-	answer = addTo(answer, z1, half);
-	answer = addTo(answer, z2, half * 2);
+	addTo(answer, z0, 0);
+	addTo(answer, z1, half);
+	addTo(answer, z2, half * 2);
 
 	return answer;
 }
