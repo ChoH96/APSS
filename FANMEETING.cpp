@@ -6,64 +6,71 @@
 using namespace std;
 //implemented using book's algorithm
 
-vector<int> multiply(vector<int> a, vector<int> b) {
-	int i, j;
-	vector<int> answer = vector<int>(a.size() + b.size() + 1, 0);
-	
-	for (i = 0; i < a.size(); i++) {
-		for (j = 0; j < b.size(); j++) {
-			answer[i + j] += a[i] * b[j];
-		}
-	}
-	return answer;
-}
+//vector<int> multiply(vector<int> a, vector<int> b) {
+//	int i, j;
+//	vector<int> answer = vector<int>(aSize + b.size() + 1, 0);
+//	
+//	for (i = 0; i < aSize; i++) {
+//		for (j = 0; j < b.size(); j++) {
+//			answer[i + j] += a[i] * b[j];
+//		}
+//	}
+//	return answer;
+//}
 
-vector<int> addTo(vector<int> &a, vector<int> &b, int shift) {
+void addTo(vector<int>& a, vector<int>& b, int shift) {
 	int i;
-	if (a.size() < b.size() + shift) {
-		a.resize(b.size() + shift, 0);
+	int bSize = b.size();
+	if (a.size() < bSize + shift) {
+		a.resize(bSize + shift, 0);
 	}
 
-	for (i = 0; i < b.size(); i++) {
+	for (i = 0; i < bSize; i++) {
 		a[i + shift] += b[i];
 	}
-	return a;
 }
-
-vector<int> subFrom(vector<int> &a, vector<int> &b, int shift) {
+void subFrom(vector<int> &a, vector<int> &b, int shift) {
 	int i;
-	if (a.size() < b.size() + shift) {
-		a.resize(b.size() + shift, 0);
+	int bSize = b.size();
+	if (a.size() < bSize + shift) {
+		a.resize(bSize + shift, 0);
 	}
 
-	for (i = 0; i < b.size(); i++) {
+	for (i = 0; i < bSize; i++) {
 		a[i + shift] -= b[i];
 	}
-	return a;
 }
 
 
 //find answer in bounded area [start,end)
 vector<int> karatsuba(vector<int> a, vector<int> b) {
 	int i, j;
+	int aSize = a.size(), bSize = b.size();
 	int half;
 	vector<int> answer;
 	
-	if (a.size() < b.size()) {
+	if (aSize < bSize) {
 		return karatsuba(b, a);
 	}
-	if (b.size() == 0) {
+	if (bSize == 0) {
 		return vector<int>();
 	}
-	if (a.size() < 50) {
-		return multiply(a, b);
+	if (aSize < 100) {
+		answer.resize(aSize + bSize + 1, 0);
+
+		for (i = 0; i < aSize; i++) {
+			for (j = 0; j < bSize; j++) {
+				answer[i + j] += a[i] * b[j];
+			}
+		}
+		return answer;
 	}
 
-	half = a.size() / 2;
+	half = aSize / 2;
 	vector<int> a0(a.begin(), a.begin() + half);
 	vector<int> a1(a.begin() + half, a.end());
-	vector<int> b0(b.begin(), b.begin() + min<int>(b.size(), half));
-	vector<int> b1(b.begin() + min<int>(b.size(), half), b.end());
+	vector<int> b0(b.begin(), b.begin() + min<int>(bSize, half));
+	vector<int> b1(b.begin() + min<int>(bSize, half), b.end());
 
 	vector<int> z2 = karatsuba(a1, b1);
 	vector<int> z0 = karatsuba(a0, b0);
