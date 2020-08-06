@@ -10,3 +10,5 @@ algorithmic problem solving strategies
 7. FENCE (using using book's algorithm) vs FENCE2 (my own algorithm)
 8. FANMEETING
 9. JUMPGAME (1, 2)
+10. lis (1, 2)
+11. TRIANGLEPATH
