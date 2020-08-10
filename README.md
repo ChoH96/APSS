@@ -12,3 +12,6 @@ algorithmic problem solving strategies
 9. JUMPGAME (1, 2)
 10. lis (1, 2)
 11. TRIANGLEPATH
+WILDCARD, JLIS need to be done
+
+TRIANGLEPATH, SNAIL done
