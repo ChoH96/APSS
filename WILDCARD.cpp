@@ -8,6 +8,10 @@ using namespace std;
 //ios_base::sync_with_stdio(false)
 //try to use '\n' than endl
 
+
+//match wIdx ~, cIdx ~
+//when wString[wIdx] == '*' searching forward is faster in the test case
+//searching backward also works
 int wildcard(vector<vector<int>> &mem, string wString, string cString, int wIdx, int cIdx) {
 	int i, j, k, tmp;
 
@@ -15,8 +19,8 @@ int wildcard(vector<vector<int>> &mem, string wString, string cString, int wIdx,
 	if (ret != -1) return ret;
 	
 	if (wString[wIdx] == '*') {
-		for (i = cString.size(); i >= cIdx ; i--) {
-			tmp = wildcard(mem, wString, cString, wIdx + 1, i);
+		for(i=0;cIdx + i <= cString.size();i++){
+		tmp = wildcard(mem, wString, cString, wIdx + 1, cIdx + i);
 			if (tmp) {
 				return ret = tmp;
 			}
@@ -25,7 +29,7 @@ int wildcard(vector<vector<int>> &mem, string wString, string cString, int wIdx,
 	}
 	else{
 		if (wString[wIdx] == '?' || wString[wIdx] == cString[cIdx]) {
-			return ret = wildcard(mem, wString, cString, wIdx + 1, cIdx + 1);
+			return ret = wildcard(mem, wString, cString, wIdx + 1, cIdx + 1); //wIdx + 1, cIdx + 1
 		}
 		else {
 			return ret = 0;
