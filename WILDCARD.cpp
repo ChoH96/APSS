@@ -8,32 +8,28 @@ using namespace std;
 //ios_base::sync_with_stdio(false)
 //try to use '\n' than endl
 
-bool wildcard(string wString, string cString, int wIdx, int cIdx, bool afterStar) {
+int wildcard(vector<vector<int>> &mem, string wString, string cString, int wIdx, int cIdx) {
 	int i, j, k, tmp;
-	//if (wIdx >= wString.size()) return true;
 
-	if (afterStar) {
-		if (wIdx == wString.size()) return true;
-
-		for (j = cIdx; j < cString.size() && wString[wIdx] != cString[j]; j++);
-		if (j == cString.size()) return false;
-
-		return wildcard(wString, cString, wIdx + 1, j + 1, false)
-			|| wildcard(wString, cString, wIdx, j + 1, true);
-	}
-	else {
-		for (i = wIdx, j = cIdx; i < wString.size(); i++, j++) {
-			if (wString[i] == '*') {
-				for (k = 1; i + k < wString.size() && wString[i + k] == '*'; k++);
-				return wildcard(wString, cString, i + k, j, true);
-			}
-			else {
-				if (j >= cString.size()) return false;
-				if (wString[i] != '?' && wString[i] != cString[j]) return false;
+	int& ret = mem[wIdx][cIdx];
+	if (ret != -1) return ret;
+	
+	if (wString[wIdx] == '*') {
+		for (i = cString.size(); i >= cIdx ; i--) {
+			tmp = wildcard(mem, wString, cString, wIdx + 1, i);
+			if (tmp) {
+				return ret = tmp;
 			}
 		}
-		if (j < cString.size()) return false;
-		else return true;
+		return ret = 0;
+	}
+	else{
+		if (wString[wIdx] == '?' || wString[wIdx] == cString[cIdx]) {
+			return ret = wildcard(mem, wString, cString, wIdx + 1, cIdx + 1);
+		}
+		else {
+			return ret = 0;
+		}
 	}
 }
 
@@ -55,17 +51,45 @@ int main()
 		//inputs
 		cin >> wString;
 		cin >> size;
-		for (i = 0; i < size; i++) {
+		while (size) {
 			cin >> cString;
-			//
-			if (wildcard(wString,cString,0,0,false)) {
+			
+			//memorization 
+			vector<vector<int>> mem(wString.size() + 1, vector<int>(cString.size() + 1, -1));
+			mem[wString.size()][cString.size()] = 1;
+			
+			//filling edges
+			for (i = 0; i < wString.size(); i++) {
+				mem[i][cString.size()] = 0;
+			}
+
+			for (i = 0; i < cString.size() && cString[i] == '*'; i++) {
+				mem[wString.size()][i] = 1;
+			}
+			for (; i < cString.size(); i++) {
+				mem[wString.size()][i] = 0;
+			}
+
+			//use
+			if (wildcard(mem, wString, cString, 0, 0)) {
 				answer.push_back(cString);
 			}
+
+			//print mem
+			/*for (i = 0; i < mem.size(); i++) {
+				for (j = 0; j < mem[i].size(); j++) {
+					printf("%4d", mem[i][j]);
+				}
+				printf("\n");
+			}*/
+
+
+			size--;
 		}
 
 		sort(answer.begin(), answer.end());
 		for (i = 0; i < answer.size(); i++) {
-			cout <<  "   " << answer[i] << '\n';
+			cout /*<< "           "*/ << answer[i] << '\n';
 		}
 		
 
